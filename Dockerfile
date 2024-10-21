@@ -5,7 +5,7 @@ FROM amazoncorretto:17-alpine-jdk
 
 RUN mkdir /app
 WORKDIR /app/
-COPY outcome-curr-mgmt-1.0-SNAPSHOT.jar /app/
+ADD outcome-curr-mgmt-1.0-SNAPSHOT.jar /app/
 
 EXPOSE 9092
 
