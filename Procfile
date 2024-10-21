@@ -1,0 +1,1 @@
+ web: java -Dserver.port=$PORT -jar outcome-curr-mgmt/target/*.jar
