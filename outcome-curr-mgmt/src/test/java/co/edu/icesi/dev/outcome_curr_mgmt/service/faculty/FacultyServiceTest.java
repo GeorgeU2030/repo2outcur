@@ -11,6 +11,9 @@ import co.edu.icesi.dev.outcome_curr_mgmt.service.audit.ChangeLogServiceImpl;
 import co.edu.icesi.dev.outcome_curr_mgmt.service.faculty.matcher.FacultyMatcher;
 import co.edu.icesi.dev.outcome_curr_mgmt.service.provider.faculty.FacultyProviderImpl;
 import co.edu.icesi.dev.outcome_curr_mgmt.service.validator.faculty.FacultyValidator;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,12 +52,20 @@ public class FacultyServiceTest {
     FacultyRepository facultyRepository;
     @InjectMocks
     FacultyServiceImpl facultyService;
+    @Mock
+    MeterRegistry meterRegistry;
+    @Mock
+    Counter counter;
 
     @BeforeEach
     void setup() {
+
+        when(meterRegistry.counter(anyString())).thenReturn(counter);
+
         ReflectionTestUtils.setField(facultyService, "facultyMapper", facultyMapper);
         ReflectionTestUtils.setField(facultyService, "facultyProvider", facultyProvider);
         ReflectionTestUtils.setField(facultyService, "facultyRepository", facultyRepository);
+        ReflectionTestUtils.setField(facultyService, "meterRegistry", meterRegistry);
     }
 
     @Test

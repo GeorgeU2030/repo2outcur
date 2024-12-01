@@ -1,0 +1,33 @@
+<configuration>        
+   <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <http>
+            <url>http://172.17.0.1:3100/loki/api/v1/push</url>
+        </http>
+        <format>
+            <label>
+                <pattern>app="outcurr-project",host="localhost",level=%level</pattern>
+                <readMarkers>true</readMarkers>
+            </label>
+            <message>
+                <pattern>
+                    {
+                    "timestamp":"%date{ISO8601}",
+                    "level":"%level",
+                    "logger":"%logger{36}",
+                    "thread":"%thread",
+                    "message":"%message",
+                    "requestId":"%X{X-Request-ID}",
+                    "method":"%X{method}",
+                    "operation":"%X{operation}",
+                    "entityId":"%X{entityId}",
+                    "userId":"%X{userId}"
+                    }
+                </pattern>
+            </message>
+         </format>
+     </appender>
+     
+     <root level="INFO">
+        <appender-ref ref="LOKI" />
+     </root>
+</configuration>

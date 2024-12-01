@@ -23,27 +23,18 @@ import java.util.regex.Pattern;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final SaamfiAuthenticationFilter saamfiAuthenticationFilter;
-
-    public SecurityConfig(SaamfiAuthenticationFilter saamfiAuthenticationFilter) {
-        this.saamfiAuthenticationFilter = saamfiAuthenticationFilter;
-    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable);
-        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
-        http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
-        http.authorizeHttpRequests(authz -> authz.requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll());
-        http.authorizeHttpRequests(authz -> authz.requestMatchers(new AntPathRequestMatcher("/v1/auth/users/login")).permitAll());
-        http.authorizeHttpRequests(authz -> authz.requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll());
-        http.authorizeHttpRequests(authz -> authz.requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll());
-        http.authorizeHttpRequests(authz -> authz.requestMatchers(new AntPathRequestMatcher("/v1/**")).authenticated());
-        http.authorizeHttpRequests(authz -> authz.requestMatchers(new AntPathRequestMatcher("/**")).authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.addFilterBefore(saamfiAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(AbstractHttpConfigurer::disable) // Deshabilitar CORS para pruebas
+            .authorizeHttpRequests(authz -> authz.anyRequest().permitAll()) 
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
+
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

@@ -49,31 +49,30 @@ public interface AuthFacultyController {
     FacultyOutDTO createFaculty
             (@Valid @RequestBody FacultyInDTO facultyInDTO);
 
-    @GetMapping("/")
-    @PreAuthorize("hasAnyRole('"+ROLE_ADMIN_FACULTIES_ANY+"','"+ROLE_QUERY_FACULTIES_ANY+"')")
-    @Operation(summary = "Get the faculties")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {
-                    @Content(schema = @Schema(implementation = FacultyOutDTO.class, $comment = OK), mediaType = "application/json")}),
-            @ApiResponse(responseCode = "401", content = {
-                    @Content(schema = @Schema($comment = UN_AUTHORIZED))}),
-            @ApiResponse(responseCode = "403", content = {
-                    @Content(schema = @Schema($comment = "Required permissions for this operation: "+ROLE_ADMIN_FACULTIES_ANY+" AND "+ROLE_QUERY_FACULTIES_ANY))})})
-    List<FacultyOutDTO> getFaculties();
+            @GetMapping("/")
+            @Operation(summary = "Get the faculties")
+            @ApiResponses({
+                    @ApiResponse(responseCode = "200", content = {
+                            @Content(schema = @Schema(implementation = FacultyOutDTO.class, $comment = OK), mediaType = "application/json")}),
+                    @ApiResponse(responseCode = "401", content = {
+                            @Content(schema = @Schema($comment = UN_AUTHORIZED))}),
+                    @ApiResponse(responseCode = "403", content = {
+                            @Content(schema = @Schema($comment = "Forbidden"))})})
+            List<FacultyOutDTO> getFaculties();
 
-    @GetMapping("/{facultyId}")
-    @Operation(summary = "Get a faculty by Id")
-    @PreAuthorize("hasAnyRole('"+ROLE_ADMIN_FACULTIES_ANY+"','"+ROLE_QUERY_FACULTIES_ANY+"','"+ROLE_ADMIN_FACULTIES_OWN+"','"+ROLE_QUERY_FACULTIES_OWN+"')")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = {
-                    @Content(schema = @Schema(implementation = FacultyOutDTO.class, $comment = OK), mediaType = "application/json")}),
-            @ApiResponse(responseCode = "401", content = {
-                    @Content(schema = @Schema($comment = UN_AUTHORIZED))}),
-            @ApiResponse(responseCode = "403", content = {
-                    @Content(schema = @Schema($comment = "Required permissions for this operation: "+ROLE_ADMIN_FACULTIES_ANY+" OR "+ROLE_QUERY_FACULTIES_ANY+" OR "+ROLE_ADMIN_FACULTIES_OWN+" OR "+ROLE_QUERY_FACULTIES_OWN))})})
-            @ApiResponse(responseCode = "404", content = {
-                    @Content(schema = @Schema($comment = "Faculty not found"))})
-    FacultyOutDTO getFacultyByFacId(@PathVariable("facultyId") long facultyId);
+            @GetMapping("/{facultyId}")
+            @Operation(summary = "Get a faculty by Id")
+            @ApiResponses({
+                    @ApiResponse(responseCode = "200", content = {
+                            @Content(schema = @Schema(implementation = FacultyOutDTO.class, $comment = OK), mediaType = "application/json")}),
+                    @ApiResponse(responseCode = "401", content = {
+                            @Content(schema = @Schema($comment = UN_AUTHORIZED))}),
+                    @ApiResponse(responseCode = "403", content = {
+                            @Content(schema = @Schema($comment = "Forbidden"))}),
+                    @ApiResponse(responseCode = "404", content = {
+                            @Content(schema = @Schema($comment = "Faculty not found"))})
+            })
+            FacultyOutDTO getFacultyByFacId(@PathVariable("facultyId") long facultyId);
 
     @GetMapping("/nameInSpa/{facultySpaName}")
     @PreAuthorize("hasAnyRole('"+ROLE_ADMIN_FACULTIES_ANY+"','"+ROLE_QUERY_FACULTIES_ANY+"','"+ROLE_ADMIN_FACULTIES_OWN+"','"+ROLE_QUERY_FACULTIES_OWN+"')")
